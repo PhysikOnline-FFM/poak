@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'south',
+    'manage_worksheets',
 )
 
 MIDDLEWARE_CLASSES = (
