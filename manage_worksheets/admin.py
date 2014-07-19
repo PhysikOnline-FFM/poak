@@ -1,3 +1,5 @@
 from django.contrib import admin
+from manage_worksheets.models import Worksheet, Tag
 
-# Register your models here.
+admin.site.register(Worksheet)
+admin.site.register(Tag)
