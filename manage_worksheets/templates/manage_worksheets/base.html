@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Physik Online Arbeitsblatt-Katalog{% endblock %}</title>
+    {% load staticfiles %}
+    <link type="text/css" rel="stylesheet" href="{% static "manage_worksheets/css/main.css" %}" />
+    <script type="text/javascript" src="{% static "manage_worksheets/js/jquery-1.11.1.min.js" %}"></script>
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <div id="tags">
+        {% block sidebar %}
+        <ul>
+        </ul>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
