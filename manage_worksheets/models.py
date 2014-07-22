@@ -11,6 +11,7 @@ class Worksheet(models.Model):
     tags = models.ManyToManyField(Tag)
     pub_date = models.DateTimeField(auto_now_add=True)
     owner = models.CharField(max_length=20)
+    author = models.CharField(max_length=200)
     upvotes = models.IntegerField(default=0)
     downvotes = models.IntegerField(default=0)
     def __unicode__(self):
