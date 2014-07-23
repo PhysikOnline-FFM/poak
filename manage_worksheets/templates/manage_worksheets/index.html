@@ -5,6 +5,18 @@
 <script type="text/javascript" src="{% static "manage_worksheets/js/main.js" %}"></script>
 {% endblock %}
 
-{% block content %}
-test
+{% block main %}
+    <h1>Physik Online Arbeitsblatt-Katalog</h1>
+    <div id="tags">
+        <h2>Tags</h2>
+        <ul>
+        </ul>
+    </div>
+
+    <div id="worksheets">
+        <h2>Worksheets</h2>
+        <ul>
+        </ul>
+    </div>
+    <a href="{% url 'manage_worksheets:submit' %}">Neues Arbeitsblatt einreichen</a>
 {% endblock %}

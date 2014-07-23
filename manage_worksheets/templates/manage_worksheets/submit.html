@@ -1,0 +1,20 @@
+{% extends "manage_worksheets/base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block main %}
+    <h1>Neues Arbeitsblatt einreichen</h1>
+    <form name="new_worksheet" action="takedata" method="post">
+        <p><label for="url">URL:</label><input type="text" name="url" id="url" /></p>
+        <h3>Tags</h3>
+        {% for tag in tags %}
+            <p><input type="checkbox" name="tag" value="{{ tag.id }}" id="tag{{ tag.id }}"/>
+                <label for="tag{{ tag.id }}">{{ tag.name }}</label></p>
+        {% endfor %}
+        <input type="submit" value="OK" />
+    </form>
+    <a href="{% url 'manage_worksheets:main' %}">Zurück</a>
+
+
+{% endblock %}

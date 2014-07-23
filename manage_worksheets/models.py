@@ -16,3 +16,17 @@ class Worksheet(models.Model):
     downvotes = models.IntegerField(default=0)
     def __unicode__(self):
         return self.title
+
+    def data(self):
+        """
+        Encode data of Worksheet in a dictionary
+        """
+        dict = {
+            'worksheet_id': self.worksheet_id,
+            'title': self.title,
+            'tags': [t.name for t in self.tags.all()],
+            'pub_date': self.pub_date.isoformat(),
+            'author': self.author,
+            'score': (self.upvotes-self.downvotes),
+        }
+        return dict
