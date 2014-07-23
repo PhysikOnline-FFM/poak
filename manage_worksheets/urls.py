@@ -7,7 +7,6 @@ urlpatterns = patterns('',
     # html pages
     url(r'^$', views.main, name='main'),
     url(r'^submit$', views.submit, name='submit'),
-    #url(r'^takedata$', views.takedata, name='takedata'),
     url(r'^u/(?P<worksheet_id>.*)$', views.details, name='details'),
 
     # ajax functions

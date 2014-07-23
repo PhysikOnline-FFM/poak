@@ -4,8 +4,13 @@
 {% endblock %}
 
 {% block main %}
-    <h1>{{ worksheet.title }}</h1>
-    <span class="datetime">Hinzugefügt am
+    <h1><a href="{{ pokal_url }}/{{ worksheet.worksheet_id }}">{{ worksheet.title }}</a></h1>
+    <p><span class="datetime">Hinzugefügt am
         {{ worksheet.pub_date|date:"d.m.Y" }}
-        um {{ worksheet.pub_date|date:"H:i" }} Uhr</span>
+        um {{ worksheet.pub_date|date:"H:i" }} Uhr</span></p>
+    <p><span>Tags:</span>
+        {% for tag in worksheet.tags.all %}
+            <span class="tag">{{ tag.name }}</span>
+        {% endfor %}
+    <p><a href="{% url 'manage_worksheets:main' %}">Startseite</a></p>
 {% endblock %}

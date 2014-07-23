@@ -15,11 +15,14 @@ $(function() {
             $("#tags ul").append(
                 $('<li>').append(tag_html.format(tag[0], tag[1]))
             );
+            $('#tag'+tag[0]).change(function () {
+                on_change_tag($(this));
+            });
         });
     });
 
     // html-code for the links with placeholders
-    var ws_html = '<li><a href="{0}/home/pub/{1}"><span class="ws_link">{2}</span></a> '+
+    var ws_html = '<li><a href="{0}/{1}"><span class="ws_link">{2}</span></a> '+
             '<a href="u/{1}">(Kommentare)</a></li>';
     $.getJSON("worksheet_list", function( data ) {
         worksheets = data.worksheet_list;
@@ -34,3 +37,10 @@ $(function() {
         });
     });
 });
+
+var on_change_tag = function(tag_obj) {
+    $.getJSON("worksheets_for_tag/"+tag_obj.attr("value"), function(data) {
+        worksheet_ids = data.worksheet_list;
+        alert("passende worksheets: "+worksheet_ids.join());
+    });
+};

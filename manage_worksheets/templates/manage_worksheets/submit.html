@@ -5,8 +5,19 @@
 
 {% block main %}
     <h1>Neues Arbeitsblatt einreichen</h1>
-    <form name="new_worksheet" action="takedata" method="post">
-        <p><label for="url">URL:</label><input type="text" name="url" id="url" /></p>
+    {% if error %}
+        <span class="error">Ein Fehler ist aufgetreten!</span>
+    {% endif %}
+    <form name="new_worksheet" action="{% url 'manage_worksheets:submit' %}" method="post">
+        {% csrf_token %}
+        <p><label for="url">URL:</label>
+            {% if worksheet_id|length > 0 %}
+                <input type="text" name="url" id="url" size="50" value="{{ pokal_url }}/{{ worksheet_id }}/" />
+            {% else %}
+                <input type="text" name="url" id="url" size="50" />
+            {% endif %}
+        </p>
+
         <h3>Tags</h3>
         {% for tag in tags %}
             <p><input type="checkbox" name="tag" value="{{ tag.id }}" id="tag{{ tag.id }}"/>
