@@ -21,7 +21,7 @@ class Worksheet(models.Model):
         """
         Encode data of Worksheet in a dictionary
         """
-        dict = {
+        dictionary = {
             'worksheet_id': self.worksheet_id,
             'title': self.title,
             'tags': [t.name for t in self.tags.all()],
@@ -29,4 +29,4 @@ class Worksheet(models.Model):
             'author': self.author,
             'score': (self.upvotes-self.downvotes),
         }
-        return dict
+        return dictionary
