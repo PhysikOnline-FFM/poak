@@ -12,4 +12,6 @@ urlpatterns = patterns('',
     url(r'^submit$', views.submit, name='submit'),
     url(r'^takedata$', views.takedata, name='takedata'),
     url(r'^u/(?P<worksheet_id>.*)$', views.details, name='details'),
+    url(r'^worksheets_for_tag/(?P<tag_id>\d+)', views.worksheets_for_tag,
+        name='worksheets_for_tag'),
     )
