@@ -2,6 +2,7 @@ from manage_worksheets.models import Tag, Worksheet
 from django.http import HttpResponse
 import json
 from poak.settings import POKAL_URL
+from django.core.urlresolvers import reverse
 
 #
 # This file contains the server side code for the AJAX on the frontpage
@@ -58,5 +59,10 @@ def worksheet_list(request):
     the ID can be appended to get the complete URL of the worksheet
     """
 
+    # details base url
+    dbu = reverse('manage_worksheets:details', args=[''])
+
     ws_list = [w.worksheet_id for w in Worksheet.objects.all()]
-    return jsonify({'worksheet_list':ws_list, 'pokal_url':POKAL_URL})
+    return jsonify({'worksheet_list':ws_list, 'pokal_url':POKAL_URL,
+                'details_base_url':dbu,
+                })

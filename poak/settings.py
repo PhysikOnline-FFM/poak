@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'south',
     'manage_worksheets',
+    'users',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -93,3 +94,7 @@ STATIC_URL = '/static/'
 # Other
 
 POKAL_URL = 'https://dev.pokal.uni-frankfurt.de/home/pub'
+
+LOGIN_URL = 'users:my_login'
+LOGOUT_URL = 'users:my_logout'
+LOGIN_REDIRECT_URL = 'users:account'

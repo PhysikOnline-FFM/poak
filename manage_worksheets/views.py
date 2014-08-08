@@ -1,14 +1,16 @@
 from django.shortcuts import render, get_object_or_404
 from manage_worksheets.models import Tag, Worksheet
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from poak.settings import POKAL_URL
+from django.contrib.auth.decorators import login_required
 import requests
 
 
 def main(request):
     return render(request, "manage_worksheets/index.html")
 
+@login_required
 def submit(request):
     """
     three possibilies:
@@ -68,25 +70,29 @@ def _process_submission(request, url, tag_ids):
 
     # get data from POKAL
     r = requests.get(url+'/worksheet_properties')
-    # if this fails, it raises a ValueError
+
+    # if the following fails, it raises a ValueError
     worksheet_properties = r.json()
     try:
         title = worksheet_properties['name']
         author = worksheet_properties['worksheet_that_was_published'][0]
     except KeyError:
-        raise ValueError
+        raise ValueError # to make handling easier, make everything ValueErrors
 
     # make new entry in the database
     w = Worksheet(worksheet_id=worksheet_id,
-            title=title, owner='admin', author=author)
-    w.save() # has to be saved now
+            title=title, owner=request.user.username, author=author)
+    w.save() # has to be saved before we can add the tags
 
     # see if we can decode the tags
     for tag_id in tag_ids:
         try:
             w.tags.add(Tag.objects.get(id=tag_id))
         except Tag.DoesNotExist:
-            pass # not much use to throw an exception at this point
+            # the input data is corrupt
+            # abort the process
+            w.delete()
+            raise ValueError # maybe it should be another error
 
     return w.worksheet_id
 

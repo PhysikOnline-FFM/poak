@@ -7,7 +7,7 @@ urlpatterns = patterns('',
     # html pages
     url(r'^$', views.main, name='main'),
     url(r'^submit$', views.submit, name='submit'),
-    url(r'^u/(?P<worksheet_id>.*)$', views.details, name='details'),
+    url(r'^w/(?P<worksheet_id>.*)$', views.details, name='details'),
 
     # ajax functions
     url(r'^tags$', ajax.tags, name='tags'),
