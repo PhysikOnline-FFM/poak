@@ -1,22 +1,22 @@
-String.prototype.format = ->
-    args = arguments
-    return @replace(/\{(\d+)\}/g, (m, n) -> return args[n])
-
+# on document ready
 $ ->
     # get a JSON-file with all tags
     $.getJSON "tags", (data) ->
-        tag_html = '<li><input type="checkbox" name="tag" value="{0}" id="tag{0}"/>
-            <label for="tag{0}">{1}</label></li>'
+        tag_html = (tag_id, tag_name) ->
+            "<li><input type=\"checkbox\" name=\"tag\" value=\"#{tag_id}\" id=\"tag#{tag_id}\"/>
+            <label for=\"tag#{tag_id}\">#{tag_name}</label></li>"
         $.each data.tags, (index, tag) ->
             $("#tags ul").append(
-                $("<li>").append(tag_html.format(tag[0], tag[1]))
+                $("<li>").append(tag_html tag[0], tag[1])
             )
             $("#tag"+tag[0]).change ->
                 on_change_tag($(this))
 
     # html-code for the links with placeholders
-    ws_html = '<li><a href="{0}/{1}"><span class="ws_link">{2}</span></a>
-        <a href="{3}{1}">(Kommentare)</a></li>'
+    ws_html = (pokal_url, worksheet_id, worksheet_title, details_base_url) ->
+        "<li><a href=\"#{pokal_url}/#{worksheet_id}\">
+        <span class=\"ws_link\">#{worksheet_title}</span></a>
+        <a href=\"#{details_base_url}#{worksheet_id}\">(Kommentare)</a></li>"
     $.getJSON "worksheet_list", (data) ->
         worksheets = data.worksheet_list
         pokal_url =  data.pokal_url
@@ -25,8 +25,8 @@ $ ->
             $.getJSON "worksheet_details/"+worksheet_id, (worksheet) ->
                 $("#worksheets ul").append(
                     # fill the placeholders in the html-code
-                    ws_html.format(pokal_url, worksheet.worksheet_id,
-                        worksheet.title, details_base_url)
+                    ws_html pokal_url, worksheet.worksheet_id,
+                        worksheet.title, details_base_url
                 )
 
 
