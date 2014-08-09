@@ -19,7 +19,7 @@ $ ->
 
     # html-code for the links with placeholders
     ws_html = (pokal_url, worksheet_id, worksheet_title, details_base_url) ->
-        "<li><a href=\"#{pokal_url}/#{worksheet_id}\">
+        "<li id=\"ws#{worksheet_id}\"><a href=\"#{pokal_url}/#{worksheet_id}\">
         <span class=\"ws_link\">#{worksheet_title}</span></a>
         <a href=\"#{details_base_url}#{worksheet_id}\">(Kommentare)</a></li>"
 
