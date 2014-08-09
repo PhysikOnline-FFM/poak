@@ -1,4 +1,4 @@
-{% extends "manage_worksheets/base.html" %}
+{% extends "base.html" %}
 
 {% block head %}
 {% load staticfiles %}
@@ -7,6 +7,14 @@
 
 {% block main %}
     <h1>Physik Online Arbeitsblatt-Katalog</h1>
+    {% if user.is_authenticated %}
+    <div id="userbar">
+        <span>Eingeloggt als {{ user.username }}.</span>
+        <a href="{% url "users:my_logout" %}">Abmelden</a>
+    </div>
+    {% else %}
+    <p><a href="{% url "users:my_login" %}">Anmelden</a></p>
+    {% endif %}
     <div id="tags">
         <h2>Tags</h2>
         <ul>
