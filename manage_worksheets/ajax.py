@@ -66,3 +66,31 @@ def worksheet_list(request):
     return jsonify({'worksheet_list':ws_list, 'pokal_url':POKAL_URL,
                 'details_base_url':dbu,
                 })
+
+def minus_tag(request, tag_id):
+    """
+    returns all worksheets that have to be removed from a list
+    after unchecking the given tag
+    """
+
+    try:
+        tag = Tag.objects.get(id=tag_id)
+        # get the list of tags that are still checked
+        checked_tags = [Tag.objects.get(id=ch_tag_id) for ch_tag_id in request.GET.getlist('checked_tags[]')]
+    except Tag.DoesNotExist:
+        return jsonify({}) # empty response
+
+
+    ws_list = []
+
+    for w in tag.worksheet_set.all():
+        found = False
+        for ch_tag in checked_tags:
+            if ch_tag.worksheet_set.filter(pk=w.pk).exists():
+                found = True
+                break
+        if not found:
+            ws_list.append(w.worksheet_id)
+                
+    return jsonify({'worksheet_list':ws_list})
+
