@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'poak.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^u/', include('users.urls', namespace='users')),
-    url(r'^', include('manage_worksheets.urls', namespace='manage_worksheets')),
+    url(r'^poak/admin/', include(admin.site.urls)),
+    url(r'^poak/u/', include('users.urls', namespace='users')),
+    url(r'^poak/', include('manage_worksheets.urls', namespace='manage_worksheets')),
 )
