@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block main %}
-{{ user.username }}
-{{ user.firstname }}
+<h1>Einstellungen</h1>
+<p>Eingeloggt als {{ user.username }}</p>
+<a href="{% url 'manage_worksheets:main' %}">Startseite</a>
 {% endblock %}

@@ -36,7 +36,7 @@ def submit(request):
             # if there was no error, everything is fine
             return HttpResponseRedirect(
                         reverse('manage_worksheets:details',
-                        args=worksheet_id))
+                        args=[worksheet_id]))
         except ValueError:
             # there was an error
             return render(request, "manage_worksheets/submit.html", {

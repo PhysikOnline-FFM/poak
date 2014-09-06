@@ -6,6 +6,8 @@
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
+<p>Anmeldung mit HRZ-Account</p>
+
 <form method="post" action="{% url 'users:my_login' %}">
 {% csrf_token %}
 <table>

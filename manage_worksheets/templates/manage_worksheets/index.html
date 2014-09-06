@@ -9,7 +9,7 @@
     <h1>Physik Online Arbeitsblatt-Katalog</h1>
     {% if user.is_authenticated %}
     <div id="userbar">
-        <span>Eingeloggt als {{ user.username }}.</span>
+        <span>Eingeloggt als <a href="{% url 'users:account' %}">{{ user.username }}</a>.</span>
         <a href="{% url "users:my_logout" %}">Abmelden</a>
     </div>
     {% else %}
@@ -17,6 +17,7 @@
     {% endif %}
     <div id="tags">
         <h2>Tags</h2>
+	<p><input id="tagall" type="checkbox" checked="checked" /> <label for="tagall">Alle</label></p>
         <ul>
         </ul>
     </div>
