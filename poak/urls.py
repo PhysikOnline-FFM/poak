@@ -10,5 +10,6 @@ urlpatterns = patterns('',
 
     url(r'^poak/admin/', include(admin.site.urls)),
     url(r'^poak/u/', include('users.urls', namespace='users')),
+    url(r'^poak/chat/', include('chat_history.urls', namespace='chat_history')),
     url(r'^poak/', include('manage_worksheets.urls', namespace='manage_worksheets')),
 )
