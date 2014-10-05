@@ -3,8 +3,12 @@
 <head>
     <title>{% block title %}Physik Online Arbeitsblatt-Katalog{% endblock %}</title>
     {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static "lib/bootstrap-3.2.0-dist/css/bootstrap.min.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "lib/bootstrap-3.2.0-dist/css/bootstrap-theme.min.css" %}" />
     <link type="text/css" rel="stylesheet" href="{% static "manage_worksheets/css/main.css" %}" />
     <script type="text/javascript" src="{% static "lib/jquery-1.11.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "lib/bootstrap-3.2.0-dist/js/bootstrap.min.js" %}">
+    </script>
     {% block head %}{% endblock %}
 </head>
 

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
+{% load threadedcomments_tags %}
+{% load comments %}
 
 {% block head %}
+   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
+<script type="text/javascript" src="{{ STATIC_URL }}fluent_comments/js/ajaxcomments.js"></script>
 {% endblock %}
 
 {% block main %}
@@ -13,4 +17,17 @@
             <span class="tag">{{ tag.name }}</span>
         {% endfor %}
     <p><a href="{% url 'manage_worksheets:main' %}">Startseite</a></p>
+    {% if comment_count %}
+   <h2 class="comments-heading">Kommentare</h2>
+   {% render_comment_list for worksheet %}
+   {% else %}
+   <p>Noch keine Kommentare.</p>
+   {% endif %}
+    {% if user.is_authenticated %}
+   {% render_comment_form for worksheet %}
+   {% else %}
+    <p><a href="{% url 'users:my_login' %}">Anmelden</a> um zu kommentieren.</p>
+    {% endif %}
+
+
 {% endblock %}
