@@ -2,5 +2,5 @@
 db.sqlite3
 migrations/
 poak/settings_secret.py
-js/
-css/
+**/manage_worksheets/js/
+**/manage_worksheets/css/
