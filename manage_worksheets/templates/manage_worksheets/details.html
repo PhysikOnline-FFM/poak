@@ -17,12 +17,13 @@
             <span class="tag">{{ tag.name }}</span>
         {% endfor %}
     <p><a href="{% url 'manage_worksheets:main' %}">Startseite</a></p>
-    {% if comment_count %}
+    {% get_comment_count for worksheet as comment_count %}
+    {% if comment_count != 0 %}
    <h2 class="comments-heading">Kommentare</h2>
-   {% render_comment_list for worksheet %}
    {% else %}
    <p>Noch keine Kommentare.</p>
    {% endif %}
+   {% render_comment_list for worksheet %}
     {% if user.is_authenticated %}
    {% render_comment_form for worksheet %}
    {% else %}
