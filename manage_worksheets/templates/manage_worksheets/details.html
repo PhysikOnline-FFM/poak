@@ -27,7 +27,8 @@
     {% if user.is_authenticated %}
    {% render_comment_form for worksheet %}
    {% else %}
-    <p><a href="{% url 'users:my_login' %}">Anmelden</a> um zu kommentieren.</p>
+    <p><a href="{% url 'manage_worksheets:loggedin_details' worksheet.worksheet_id %}">
+      Anmelden</a> um zu kommentieren.</p>
     {% endif %}
 
 

@@ -102,3 +102,9 @@ def details(request, worksheet_id):
         'worksheet': worksheet,
         'pokal_url': POKAL_URL,
         })
+
+@login_required
+def loggedin_details(request, worksheet_id):
+    return HttpResponseRedirect(
+                reverse('manage_worksheets:details',
+                args=[worksheet_id]))
