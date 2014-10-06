@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from manage_worksheets.models import Tag, Worksheet
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from poak.settings import POKAL_URL
 from django.contrib.auth.decorators import login_required
@@ -108,3 +108,17 @@ def loggedin_details(request, worksheet_id):
     return HttpResponseRedirect(
                 reverse('manage_worksheets:details',
                 args=[worksheet_id]))
+
+@login_required
+def delete(request, worksheet_id):
+    worksheet = get_object_or_404(Worksheet, worksheet_id=worksheet_id)
+
+    # see if user is allowed to delete
+    if worksheet.owner != request.user.username:
+        raise Http404
+    
+    worksheet.delete()
+    return render(request, "manage_worksheets/delete_success.html", {
+        'worksheet_id': worksheet_id,
+        })
+

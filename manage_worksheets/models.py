@@ -10,6 +10,7 @@ class Worksheet(models.Model):
     title = models.CharField(max_length=200)
     tags = models.ManyToManyField(Tag)
     pub_date = models.DateTimeField(auto_now_add=True)
+    # TODO: rename "owner" to "submitter" and "author" to "owner"
     owner = models.CharField(max_length=20)
     author = models.CharField(max_length=200)
     upvotes = models.IntegerField(default=0)

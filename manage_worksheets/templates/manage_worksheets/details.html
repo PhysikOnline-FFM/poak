@@ -9,14 +9,19 @@
 
 {% block main %}
     <h1><a href="{{ pokal_url }}/{{ worksheet.worksheet_id }}">{{ worksheet.title }}</a></h1>
-    <p><span class="datetime">Hinzugefügt am
+    <p><span class="author">Autor des Arbeitsblatts: {{ worksheet.author }}.</span>
+	<span class="datetime">Hinzugefügt am
         {{ worksheet.pub_date|date:"d.m.Y" }}
-        um {{ worksheet.pub_date|date:"H:i" }} Uhr</span></p>
+        um {{ worksheet.pub_date|date:"H:i" }} Uhr.</span>
+    {% if user.username == worksheet.owner %}
+    <a href="{% url 'manage_worksheets:delete' worksheet.worksheet_id %}">
+    Arbeitsblatt aus POAK entfernen.</a>
+    {% endif %}
+    </p>
     <p><span>Tags:</span>
         {% for tag in worksheet.tags.all %}
             <span class="tag">{{ tag.name }}</span>
         {% endfor %}
-    <p><a href="{% url 'manage_worksheets:main' %}">Startseite</a></p>
     {% get_comment_count for worksheet as comment_count %}
     {% if comment_count != 0 %}
    <h2 class="comments-heading">Kommentare</h2>
@@ -31,5 +36,6 @@
       Anmelden</a> um zu kommentieren.</p>
     {% endif %}
 
+    <p><a href="{% url 'manage_worksheets:main' %}">Zurück zur Startseite</a></p>
 
 {% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block main %}
+    <p>Das Arbeitsblatt mit der ID {{ worksheet_id }} wurde erfolgreich gelöscht.</p>
+
+    <p><a href="{% url 'manage_worksheets:main' %}">Zurück zur Startseite</a></p>
+
+{% endblock %}
