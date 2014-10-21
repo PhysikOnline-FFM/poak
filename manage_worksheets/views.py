@@ -51,14 +51,14 @@ def submit(request):
         try:
             # see if there is get data
             worksheet_id = request.GET['id']
+            form = SubmissionForm(initial={"url":POKAL_URL+"/"+worksheet_id})
         except KeyError:
-            worksheet_id = ""
+            form = SubmissionForm()
 
         return render(request, "manage_worksheets/submit.html", {
             'error': False,
-            'worksheet_id': worksheet_id,
             'pokal_url': POKAL_URL,
-            'form': SubmissionForm(),
+            'form': form,
             })
 
 def _process_submission(request, url, tags, worksheet_id=None, user=None):
@@ -74,7 +74,8 @@ def _process_submission(request, url, tags, worksheet_id=None, user=None):
         # the pattern is "base_url/worksheet_id/"
         if url[-1] == '/':
             url = url[:-1] # get rid of the last slash
-            base_url, worksheet_id = url.rsplit('/', 1) # split in two parts
+
+        base_url, worksheet_id = url.rsplit('/', 1) # split in two parts
 
         # test if the base url ist correct
         if (base_url != POKAL_URL
