@@ -105,6 +105,7 @@ STATICFILES_DIRS = (
 # Other
 
 POKAL_URL = 'https://dev.pokal.uni-frankfurt.de/home/pub'
+POKAL_UNAME_SCRIPT = 'https://dev.pokal.uni-frankfurt.de/javascript/dynamic/username.js'
 
 LOGIN_URL = 'users:my_login'
 LOGOUT_URL = 'users:my_logout'

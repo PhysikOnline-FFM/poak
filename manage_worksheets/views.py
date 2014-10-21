@@ -3,7 +3,7 @@ from manage_worksheets.models import Tag, Worksheet
 from manage_worksheets.forms import SubmissionForm, ChooseTagsForm
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
-from poak.settings import POKAL_URL
+from poak.settings import POKAL_URL, POKAL_UNAME_SCRIPT
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
 import requests
@@ -142,7 +142,7 @@ def choose_tags(request):
     2. called with a get parameter with an ID
     """
     owner = _get_POKAL_username(request)
-    if owner == None:
+    if owner == None or owner == "guest":
         raise PermissionDenied
 
     if request.method == 'POST':
@@ -177,7 +177,7 @@ def choose_tags(request):
             raise Http404
 
 def _get_POKAL_username(request):
-    url = POKAL_URL+"/javascript/dynamic/username.js"
+    url = POKAL_UNAME_SCRIPT
     r = requests.get(url, cookies=request.COOKIES)
     try:
         data = r.text
