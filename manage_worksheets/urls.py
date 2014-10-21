@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     url(r'^worksheets_for_tag/(?P<tag_id>\d+)', ajax.worksheets_for_tag,
         name='worksheets_for_tag'),
     url(r'^minus_tag/(?P<tag_id>\d+)', ajax.minus_tag, name='minus_tag'),
+    url(r'^move/(?P<from_id>\w+?)/(?P<to_id>\w+)', ajax.move, name='move'),
     )

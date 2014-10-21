@@ -9,7 +9,7 @@
 
 {% block main %}
     <h1><a href="{{ pokal_url }}/{{ worksheet.worksheet_id }}">{{ worksheet.title }}</a></h1>
-    <p><span class="author">Autor des Arbeitsblatts: {{ worksheet.author }}.</span>
+    <p><span class="author">Autor des Arbeitsblatts: {{ worksheet.owner }}.</span>
 	<span class="datetime">Hinzugefügt am
         {{ worksheet.pub_date|date:"d.m.Y" }}
         um {{ worksheet.pub_date|date:"H:i" }} Uhr.</span>

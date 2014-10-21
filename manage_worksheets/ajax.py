@@ -1,18 +1,11 @@
 from manage_worksheets.models import Tag, Worksheet
-from django.http import HttpResponse
-import json
 from poak.settings import POKAL_URL
 from django.core.urlresolvers import reverse
+from functions import get_POKAL_username, jsonify
 
 #
 # This file contains the server side code for the AJAX on the frontpage
 #
-
-def jsonify(dictionary):
-    """
-    Encodes dictionaries in JSON
-    """
-    return HttpResponse(json.dumps(dictionary), mimetype='application/json')
 
 def _tags():
     return [[t.id, t.name] for t in Tag.objects.all()]
@@ -91,6 +84,21 @@ def minus_tag(request, tag_id):
                 break
         if not found:
             ws_list.append(w.worksheet_id)
-                
+
     return jsonify({'worksheet_list':ws_list})
 
+def move(request, from_id, to_id):
+    try:
+        worksheet = Worksheet.objects.get(worksheet_id=from_id)
+    except Worksheet.DoesNotExist:
+        return jsonify({'status':'failure', 'from_id':from_id})
+
+    # test if the operation is allowed
+    username = get_POKAL_username(request)
+    if username != worksheet.owner:
+        #return jsonify({'status':'failure'})
+        pass
+
+    worksheet.worksheet_id = to_id
+    worksheet.save()
+    return jsonify({'status':'OK', 'from_id':from_id, 'to_id':to_id})

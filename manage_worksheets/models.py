@@ -10,7 +10,7 @@ class Worksheet(models.Model):
     title = models.CharField(max_length=200)
     tags = models.ManyToManyField(Tag)
     pub_date = models.DateTimeField(auto_now_add=True)
-    # TODO: rename "owner" to "submitter" and "author" to "owner"
+    # TODO: remove "author"
     owner = models.CharField(max_length=20)
     author = models.CharField(max_length=200)
     upvotes = models.IntegerField(default=0)
@@ -27,7 +27,7 @@ class Worksheet(models.Model):
             'title': self.title,
             'tags': [t.name for t in self.tags.all()],
             'pub_date': self.pub_date.isoformat(),
-            'author': self.author,
+            'owner': self.owner,
             'score': (self.upvotes-self.downvotes),
         }
         return dictionary

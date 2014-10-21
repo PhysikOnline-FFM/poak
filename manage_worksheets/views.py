@@ -3,11 +3,11 @@ from manage_worksheets.models import Tag, Worksheet
 from manage_worksheets.forms import SubmissionForm, ChooseTagsForm
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
-from poak.settings import POKAL_URL, POKAL_UNAME_SCRIPT
+from poak.settings import POKAL_URL
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
 import requests
-import re
+from functions import get_POKAL_username
 
 
 def main(request):
@@ -61,7 +61,7 @@ def submit(request):
             'form': SubmissionForm(),
             })
 
-def _process_submission(request, url, tags, worksheet_id=None, owner=None):
+def _process_submission(request, url, tags, worksheet_id=None, user=None):
     """
     creates a new database entry for the given worksheet
 
@@ -88,19 +88,19 @@ def _process_submission(request, url, tags, worksheet_id=None, owner=None):
     worksheet_properties = r.json()
     try:
         title = worksheet_properties['name']
-        author = worksheet_properties['worksheet_that_was_published'][0]
+        owner = worksheet_properties['worksheet_that_was_published'][0]
     except KeyError:
         raise ValueError # to make handling easier, make everything ValueErrors
 
-    if owner == None:
-        owner = request.user.username
+    if user == None:
+        user = request.user.username
 
-    if owner != author:
+    if owner != user:
         raise ValueError
 
     # make new entry in the database
     w = Worksheet(worksheet_id=worksheet_id,
-            title=title, owner=owner, author=author)
+            title=title, owner=owner, author="")
     w.save() # has to be saved before we can add the tags
 
     # now add the tags
@@ -128,7 +128,7 @@ def delete(request, worksheet_id):
 
     # see if user is allowed to delete
     if worksheet.owner != request.user.username:
-        raise Http404
+        raise PermissionDenied
 
     worksheet.delete()
     return render(request, "manage_worksheets/delete_success.html", {
@@ -141,8 +141,8 @@ def choose_tags(request):
     1. called with post data from a submission
     2. called with a get parameter with an ID
     """
-    owner = _get_POKAL_username(request)
-    if owner == None or owner == "guest":
+    user = get_POKAL_username(request)
+    if user == None or user == "guest":
         raise PermissionDenied
 
     if request.method == 'POST':
@@ -157,7 +157,7 @@ def choose_tags(request):
 
         try:
             _process_submission(request, url, tags,
-                                worksheet_id=worksheet_id, owner=owner)
+                                worksheet_id=worksheet_id, user=user)
             # if there was no error, everything is fine
             return HttpResponseRedirect(
                         reverse('manage_worksheets:details',
@@ -175,18 +175,3 @@ def choose_tags(request):
             })
         except KeyError:
             raise Http404
-
-def _get_POKAL_username(request):
-    url = POKAL_UNAME_SCRIPT
-    r = requests.get(url, cookies=request.COOKIES)
-    try:
-        data = r.text
-        # some regex magic
-        m1 = re.search(r'username\s=\s"(\w+?)"', data)
-        username = m1.group(1)
-        #m2 = re.search(r'nickname\s=\s"(\w+?)"', data)
-        #nickname = m2.group(1)
-    except AttributeError:
-        return None
-
-    return username
