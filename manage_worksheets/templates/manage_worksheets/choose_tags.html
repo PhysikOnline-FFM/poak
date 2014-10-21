@@ -1,0 +1,15 @@
+
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block main %}
+    <h1>Wähle Tags</h1>
+    <form name="new_worksheet" action="{% url 'manage_worksheets:choose_tags' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="OK" />
+    </form>
+
+{% endblock %}

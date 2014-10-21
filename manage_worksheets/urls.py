@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     # html pages
     url(r'^$', views.main, name='main'),
     url(r'^submit$', views.submit, name='submit'),
+    url(r'^choose_tags$', views.choose_tags, name='choose_tags'),
     url(r'^w/(?P<worksheet_id>.*)/login$', views.loggedin_details,
         name='loggedin_details'),
     url(r'^w/(?P<worksheet_id>.*)/delete$', views.delete,
