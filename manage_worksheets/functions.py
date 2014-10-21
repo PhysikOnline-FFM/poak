@@ -23,4 +23,4 @@ def jsonify(dictionary):
     """
     Encodes dictionaries in JSON
     """
-    return HttpResponse(json.dumps(dictionary), mimetype='application/json')
+    return HttpResponse(json.dumps(dictionary), content_type='application/json')

@@ -1,4 +1,4 @@
-Django==1.6.5
+Django==1.7
 Fabric==1.9.0
 South==1.0
 akismet==0.2.0

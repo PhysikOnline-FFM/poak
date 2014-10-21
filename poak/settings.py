@@ -36,7 +36,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'south',
     'manage_worksheets',
     'users',
     'fluent_comments',
