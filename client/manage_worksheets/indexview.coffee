@@ -2,8 +2,8 @@
 ws_html = (pokal_url, worksheet_id, worksheet_title, details_base_url, tags) ->
     ret = "<li id=\"ws#{worksheet_id}\"><a class=\"ws_link\" href=\"#{pokal_url}/#{worksheet_id}\">#{worksheet_title}</a>"
     for tag in tags
-        ret += "<span class=\"tag\">#{tag}</span>"
-    ret += "<a class=\"kom_link\" href=\"#{details_base_url}#{worksheet_id}\">(Kommentare)</a></li>"
+        ret += "<span class=\"label label-primary\">#{tag}</span>"
+    ret += "<div><a class=\"btn btn-xs btn-default\" href=\"#{details_base_url}#{worksheet_id}\">Kommentare</a></div></li>"
     return ret
 
 ws_list_set = (worksheet_ids) ->
@@ -47,8 +47,7 @@ $ ->
     # get a JSON-file with all tags
     $.getJSON "tags", (data) ->
         tag_html = (tag_id, tag_name) ->
-            "<li><input type=\"checkbox\" name=\"tag\" value=\"#{tag_id}\" id=\"tag#{tag_id}\"/>
-            <label for=\"tag#{tag_id}\">#{tag_name}</label></li>"
+            "<li><label class=\"label label-default\"><input type=\"checkbox\" name=\"tag\" value=\"#{tag_id}\" id=\"tag#{tag_id}\"/> #{tag_name}</label></li>"
 
         # loop over all tags
         for tag in data.tags

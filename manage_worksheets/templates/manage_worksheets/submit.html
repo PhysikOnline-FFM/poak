@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 
-{% block head %}
+{% block navbar-left %}
+<li><a href="/poak">Zurück zum Katalog</a></li>
 {% endblock %}
 
 {% block main %}
     <h1>Neues Arbeitsblatt einreichen</h1>
     {% if error %}
-        <span class="error">Ein Fehler ist aufgetreten!</span>
+		<div class="alert alert-danger" role="alert">Ein Fehler ist aufgetreten!</div>
     {% endif %}
-    <form name="new_worksheet" action="{% url 'manage_worksheets:submit' %}" method="post">
+    <form name="new_worksheet" action="{% url 'manage_worksheets:submit' %}" method="post" role="form">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="OK" />
+		<div class="col-sm-12">
+			<button type="submit" class="btn btn-primary pull-right">Abschicken</button>
+			<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück</a>
+		</div>
     </form>
-    <a href="{% url 'manage_worksheets:main' %}">Zurück</a>
-
-
 {% endblock %}

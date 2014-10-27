@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
 {% block main %}
-<p>Erfolgreich abgemeldet.</p>
-<a href="{% url 'manage_worksheets:main' %}">Zur Startseite</a>
+<div class="alert alert-success" role="alert">Du wurdest erfolgreich abgemeldet.</div>
+<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück zur Startseite</a>
 {% endblock %}

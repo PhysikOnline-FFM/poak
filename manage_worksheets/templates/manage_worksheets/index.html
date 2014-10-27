@@ -2,30 +2,31 @@
 
 {% block head %}
 {% load staticfiles %}
-<script type="text/javascript" src="{% static "manage_worksheets/js/indexview.js" %}"></script>
+<script type="text/javascript" src="{% static 'manage_worksheets/js/indexview.js' %}"></script>
 {% endblock %}
 
 {% block main %}
-    <h1>Physik Online Arbeitsblatt-Katalog</h1>
-    {% if user.is_authenticated %}
-    <div id="userbar">
-        <span>Eingeloggt als <a href="{% url 'users:account' %}">{{ user.username }}</a>.</span>
-        <a href="{% url "users:my_logout" %}">Abmelden</a>
-    </div>
-    {% else %}
-    <p><a href="{% url "users:my_login" %}">Anmelden</a></p>
-    {% endif %}
+	<h2>Veröffentlichte Arbeitsblätter</h2>
     <div id="tags">
-        <h2>Tags</h2>
-	<p><input id="tagall" type="checkbox" checked="checked" /> <label for="tagall">Alle</label></p>
-        <ul>
-        </ul>
+		<div class="col-md-3 col-lg-2">
+			<h5>Nach Tags filtern:</h5>
+		</div>
+		<div class="col-md-9 col-lg-10">
+			<label class="label label-default"><input id="tagall" type="checkbox" checked="checked" /> Alle</label>
+			<ul class="list-unstyled list-inline">
+			</ul>
+		</div>
     </div>
-
     <div id="worksheets">
-        <h2>Worksheets</h2>
-        <ul>
-        </ul>
+		<div class="col-md-3 col-lg-2">
+			<h5>Ergebnisse:</h5>
+		</div>
+		<div class="col-md-9 col-lg-10">
+			<ul class="list-unstyled">
+			</ul>
+		</div>
+		<div class="col-sm-12">
+			<a class="btn btn-default pull-right" href="{% url 'manage_worksheets:submit' %}">Neues Arbeitsblatt einreichen</a>
+		</div>
     </div>
-    <a href="{% url 'manage_worksheets:submit' %}">Neues Arbeitsblatt einreichen</a>
 {% endblock %}
