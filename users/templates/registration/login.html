@@ -1,34 +1,35 @@
 {% extends "base.html" %}
 
 {% block main %}
+<h1>Anmeldung im POAK-System <small>(mittels HRZ-Account)</small></h1>
 
 {% if form.errors %}
 <div class="alert alert-danger" role="alert">Deine Benutzername und Passwort ergeben keine gültige Anmeldeinformation. Bitte versuche es erneut.</div>
 {% endif %}
 
-<h1>Anmeldung im POAK-System <small>(mittels HRZ-Account)</small></h1>
-
-<form method="post" action="{% url 'users:my_login' %}" role="form" class="form-horizontal">
-{% csrf_token %}
+<form method="post" action="{% url 'users:my_login' %}" class="form-horizontal" role="form">
+	{% csrf_token %}
+{# Include the hidden fields #}
+	{% for hidden in form.hidden_fields %}
+		{{ hidden }}
+	{% endfor %}
+	<input type="hidden" name="next" value="{{ next }}" />
+{# Include the visible fields #}
+	{% for field in form.visible_fields %}
 	<div class="form-group">
-		<label class="col-sm-2 control-label">{{ form.username.label_tag }}</label>
-		<div class="col-sm-10">
-			{{ form.username }}
+		<label for="{{ field.id_for_label }}" class="col-sm-3 col-md-2 control-label">{{ field.label }}</label>
+		<div class="col-sm-9 col-md-10">
+			{{ field.errors }}
+			{{ field }}
 		</div>
 	</div>
+	{% endfor %}
 	<div class="form-group">
-		<label class="col-sm-2 control-label">{{ form.password.label_tag }}</label>
-		<div class="col-sm-10">
-			{{ form.password }}
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-2">
+		<div class="col-sm-3 col-md-2">
 			<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück</a>
 		</div>
-		<div class="col-sm-10">
+		<div class="col-sm-9 col-md-10">
 			<button type="submit" class="btn btn-primary">Anmelden</button>
-			<input type="hidden" name="next" value="{{ next }}" />
 		</div>
 	</div>
 </form>

@@ -1,9 +1,12 @@
 # html-code for the links with placeholders
 ws_html = (pokal_url, worksheet_id, worksheet_title, details_base_url, tags) ->
-    ret = "<li id=\"ws#{worksheet_id}\"><a class=\"ws_link\" href=\"#{pokal_url}/#{worksheet_id}\">#{worksheet_title}</a>"
+    ret = "<li id=\"ws#{worksheet_id}\" class=\"list-group-item\">"
+    ret += "<a class=\"ws_link\" href=\"#{pokal_url}/#{worksheet_id}\">#{worksheet_title}</a>"
+    ret += "<a class=\"btn btn-xs btn-default pull-right\" href=\"#{details_base_url}#{worksheet_id}\">Kommentare</a>"
+    ret += "<div>"
     for tag in tags
         ret += "<span class=\"label label-primary\">#{tag}</span>"
-    ret += "<div><a class=\"btn btn-xs btn-default\" href=\"#{details_base_url}#{worksheet_id}\">Kommentare</a></div></li>"
+    ret += "</div></li>"
     return ret
 
 ws_list_set = (worksheet_ids) ->
@@ -27,8 +30,7 @@ ws_list_add = (worksheet_ids) ->
         $.getJSON "worksheet_details/"+worksheet_id, (worksheet) ->
             $("#worksheets ul").append(
                 # fill the placeholders in the html-code
-                ws_html window.pokal_url, worksheet.worksheet_id,
-                    worksheet.title, window.details_base_url, worksheet.tags
+                ws_html window.pokal_url, worksheet.worksheet_id, worksheet.title, window.details_base_url, worksheet.tags
                 )
 
 ws_list_remove = (worksheet_ids) ->
@@ -47,7 +49,7 @@ $ ->
     # get a JSON-file with all tags
     $.getJSON "tags", (data) ->
         tag_html = (tag_id, tag_name) ->
-            "<li><label class=\"label label-default\"><input type=\"checkbox\" name=\"tag\" value=\"#{tag_id}\" id=\"tag#{tag_id}\"/> #{tag_name}</label></li>"
+            "<li class=\"list-group-item\"><label><input type=\"checkbox\" name=\"tag\" value=\"#{tag_id}\" id=\"tag#{tag_id}\"/> #{tag_name}</label></li>"
 
         # loop over all tags
         for tag in data.tags
@@ -92,7 +94,7 @@ on_change_tag = (tag_obj) ->
 # gets called if the checkbox "Alle" is clicked
 on_change_tagall = (tagall) ->
     if tagall.prop("checked") #checkbox was checked
-        $("#tags ul").find("input").prop("checked", false)
+        $("#tags ul li input").not("#tagall").prop("checked", false)
         $.getJSON "worksheet_list", (data) ->
             worksheet_ids = data.worksheet_list
             ws_list_set worksheet_ids

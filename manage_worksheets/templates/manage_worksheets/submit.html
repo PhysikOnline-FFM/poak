@@ -1,20 +1,33 @@
 {% extends "base.html" %}
 
 {% block navbar-left %}
-<li><a href="/poak">Zurück zum Katalog</a></li>
+<li><a href="{% url 'manage_worksheets:main' %}">Zurück zum Katalog</a></li>
 {% endblock %}
 
 {% block main %}
-    <h1>Neues Arbeitsblatt einreichen</h1>
-    {% if error %}
-		<div class="alert alert-danger" role="alert">Ein Fehler ist aufgetreten!</div>
-    {% endif %}
-    <form name="new_worksheet" action="{% url 'manage_worksheets:submit' %}" method="post" role="form">
-        {% csrf_token %}
-        {{ form.as_p }}
-		<div class="col-sm-12">
-			<button type="submit" class="btn btn-primary pull-right">Abschicken</button>
-			<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück</a>
+<h1>Neues Arbeitsblatt einreichen</h1>
+{% if error %}
+	<div class="alert alert-danger" role="alert">Ein Fehler ist aufgetreten!</div>
+{% endif %}
+<form name="new_worksheet" action="{% url 'manage_worksheets:submit' %}" method="post" class="form-horizontal" role="form">
+	{% csrf_token %}
+{# Include the hidden fields #}
+	{% for hidden in form.hidden_fields %}
+		{{ hidden }}
+	{% endfor %}
+{# Include the visible fields #}
+	{% for field in form.visible_fields %}
+	<div class="form-group">
+		<label for="{{ field.id_for_label }}" class="col-sm-3 col-md-2 control-label">{{ field.label }}</label>
+		<div class="col-sm-9 col-md-10">
+			{{ field.errors }}
+			{{ field }}
 		</div>
-    </form>
+	</div>
+	{% endfor %}
+	<div class="col-sm-12">
+		<button type="submit" class="btn btn-primary pull-right">Abschicken</button>
+		<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück</a>
+	</div>
+</form>
 {% endblock %}

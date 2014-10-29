@@ -23,7 +23,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">POAK - Physik Online Arbeitsblatt-Katalog</a>
+          <a class="navbar-brand" href="{% url 'manage_worksheets:main' %}">Physik Online Arbeitsblatt-Katalog</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -34,7 +34,7 @@
 		  <ul class="nav navbar-nav navbar-right">
 			{% block navbar-right %}
 			{% if user.is_authenticated %}
-			<li>Eingeloggt als <a href="{% url 'users:account' %}" style="display:inline-block">{{ user.username }}</a></li>
+			<li><p class="navbar-text">Eingeloggt als <a class="navbar-link" href="{% url 'users:account' %}">{{ user.username }}</a></p></li>
 			<li><a href="{% url 'users:my_logout' %}">Abmelden</a></li>
 			{% else %}
 			<li><a href="{% url 'users:my_login' %}">Anmelden</a></li>
