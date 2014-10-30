@@ -1,10 +1,48 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <h1>Wähle Tags</h1>
-    <form name="new_worksheet" action="{% url 'manage_worksheets:choose_tags' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="OK" />
-    </form>
+    <h1></h1>
+<form name="new_worksheet" action="{% url 'manage_worksheets:choose_tags' %}" method="post">
+<div class="col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Wähle passende Schlagworte</h3>
+		</div>
+		<div class="panel-body">
+			{% csrf_token %}
+		{# Include the hidden fields #}
+			{% for hidden in form.hidden_fields %}
+				{{ hidden }}
+			{% endfor %}
+		{# Include the visible fields #}
+			<div id="tags" class="form-group">
+				<label for="{{ form.tags.id_for_label }}" class="col-sm-6 col-md-4 control-label">{{ form.tags.label }}</label>
+				<div class="col-sm-6 col-md-8">
+					{{ form.tags.errors }}
+					<ul id="id_tags" class="list-group">
+					{% for pk, choice in form.tags.field.widget.choices %}
+					<li class="list-group-item">
+						<label for="id_tags_{{ forloop.counter0 }}">
+							<input {% for tag in app.tags.all %}{% if tag.pk == pk %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_tags_{{ forloop.counter0 }}" value="{{ pk }}" name="tags" />
+							&nbsp;{{ choice }}
+						</label>
+					</lie>
+					{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück</a>
+				</div>
+				<div class="col-sm-6 col-md-8 text-right">
+					<button type="submit" class="btn btn-primary">Abschicken</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
 {% endblock %}

@@ -8,30 +8,48 @@
 {% endblock %}
 
 {% block main %}
-	<h1><a href="{{ pokal_url }}/{{ worksheet.worksheet_id }}">{{ worksheet.title }}</a></h1>
-	<p><span class="author">Autor des Arbeitsblatts: {{ worksheet.owner }}.</span>
-	<span class="datetime">Hinzugefügt am {{ worksheet.pub_date|date:"d.m.Y" }} um {{ worksheet.pub_date|date:"H:i" }} Uhr.</span>
-	{% if user.username == worksheet.owner %}
-	<a href="{% url 'manage_worksheets:delete' worksheet.worksheet_id %}">Arbeitsblatt aus POAK entfernen.</a>
+<div id="worksheetdetails">
+	<h2>
+		<a href="{{ pokal_url }}/{{ worksheet.worksheet_id }}">{{ worksheet.title }}</a>
+		{% if user.username == worksheet.owner %}
+		<a class="btn btn-danger" href="{% url 'manage_worksheets:delete' worksheet.worksheet_id %}">Aus POAK entfernen</a>
+		{% endif %}
+	</h2>
+	<div class="col-sm-12 col-md-6">
+		<div id="tags">
+			{% for tag in worksheet.tags.all %}
+			<span class="label label-primary">{{ tag.name }}</span>
+			{% endfor %}
+		</div>
+		<div>
+			<dl class="dl-horizontal">
+				<dt class="author">Autor</dt>
+				<dd>{{ worksheet.owner }}</dd>
+				<dt class="datetime">Hinzugefügt</dt>
+				<dd>{{ worksheet.pub_date|date:"d.m.Y" }},{{ worksheet.pub_date|date:"H:i" }} Uhr</dd>
+			</dl>
+		</div>
+		<div>
+			<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück zur Startseite</a>
+		</div>
+	</div>
+	
+	<div class="col-sm-12 col-md-6">
+		{% get_comment_count for worksheet as comment_count %}
+		{% if comment_count != 0 %}
+		<h4 class="leading">Kommentare</h4>
+		{% render_comment_list for worksheet %}
+		{% else %}
+		<div class="alert alert-info" role="alert">Noch keine Kommentare vorhanden.</div>
+		{% endif %}
+	
+		{% if user.is_authenticated %}
+		{% render_comment_form for worksheet %}
+		{% else %}
+		<div>
+			<a class="btn btn-default" href="{% url 'manage_worksheets:loggedin_details' worksheet.worksheet_id %}">Anmelden</a> um zu kommentieren.
+		</div>
+	</div>
 	{% endif %}
-	</p>
-	<p><span>Tags:</span>
-		{% for tag in worksheet.tags.all %}
-			<span class="tag">{{ tag.name }}</span>
-		{% endfor %}
-	{% get_comment_count for worksheet as comment_count %}
-	{% if comment_count != 0 %}
-	<h2 class="comments-heading">Kommentare</h2>
-	{% else %}
-	<p>Noch keine Kommentare.</p>
-	{% endif %}
-	{% render_comment_list for worksheet %}
-	{% if user.is_authenticated %}
-	{% render_comment_form for worksheet %}
-	{% else %}
-	<p><a href="{% url 'manage_worksheets:loggedin_details' worksheet.worksheet_id %}">
-	  Anmelden</a> um zu kommentieren.</p>
-	{% endif %}
-
-	<p><a href="{% url 'manage_worksheets:main' %}">Zurück zur Startseite</a></p>
+</div>
 {% endblock %}

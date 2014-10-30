@@ -1,36 +1,46 @@
 {% extends "base.html" %}
 
 {% block main %}
-<h1>Anmeldung im POAK-System <small>(mittels HRZ-Account)</small></h1>
 
 {% if form.errors %}
 <div class="alert alert-danger" role="alert">Deine Benutzername und Passwort ergeben keine gültige Anmeldeinformation. Bitte versuche es erneut.</div>
 {% endif %}
 
+<div class="col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
 <form method="post" action="{% url 'users:my_login' %}" class="form-horizontal" role="form">
-	{% csrf_token %}
-{# Include the hidden fields #}
-	{% for hidden in form.hidden_fields %}
-		{{ hidden }}
-	{% endfor %}
-	<input type="hidden" name="next" value="{{ next }}" />
-{# Include the visible fields #}
-	{% for field in form.visible_fields %}
-	<div class="form-group">
-		<label for="{{ field.id_for_label }}" class="col-sm-3 col-md-2 control-label">{{ field.label }}</label>
-		<div class="col-sm-9 col-md-10">
-			{{ field.errors }}
-			{{ field }}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Anmeldung im POAK-System <small>(mittels HRZ-Account)</small></h3>
 		</div>
-	</div>
-	{% endfor %}
-	<div class="form-group">
-		<div class="col-sm-3 col-md-2">
-			<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück</a>
+		<div class="panel-body">
+			{% csrf_token %}
+		{# Include the hidden fields #}
+			{% for hidden in form.hidden_fields %}
+				{{ hidden }}
+			{% endfor %}
+			<input type="hidden" name="next" value="{{ next }}" />
+		{# Include the visible fields #}
+			{% for field in form.visible_fields %}
+			<div class="form-group">
+				<label for="{{ field.id_for_label }}" class="col-sm-6 col-md-4 control-label">{{ field.label }}</label>
+				<div class="col-sm-6 col-md-8">
+					{{ field.errors }}
+					{{ field }}
+				</div>
+			</div>
+			{% endfor %}
 		</div>
-		<div class="col-sm-9 col-md-10">
-			<button type="submit" class="btn btn-primary">Anmelden</button>
+		<div class="panel-footer">
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück</a>
+				</div>
+				<div class="col-sm-6 col-md-8 text-right">
+					<button type="submit" class="btn btn-primary">Anmelden</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </form>
+</div>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <p>Das Arbeitsblatt mit der ID {{ worksheet_id }} wurde erfolgreich gelöscht.</p>
-    <p><a href="{% url 'manage_worksheets:main' %}">Zurück zur Startseite</a></p>
+<div class="alert alert-success" role="alert">Das Arbeitsblatt mit der ID {{ worksheet_id }} wurde erfolgreich gelöscht.</div>
+<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zurück zur Startseite</a>
 {% endblock %}
