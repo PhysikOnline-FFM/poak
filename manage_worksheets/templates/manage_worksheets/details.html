@@ -14,7 +14,7 @@
 		{% if user.username == worksheet.owner %}
 		<a class="btn btn-default"
         href="{% url 'manage_worksheets:choose_tags' worksheet.worksheet_id %}">
-            Schlagwörter ändern</a>
+            Schlagworte ändern</a>
 		<a class="btn btn-danger"
             href="{% url 'manage_worksheets:delete' worksheet.worksheet_id %}">
             Aus POAK entfernen</a>
@@ -41,10 +41,9 @@
 	
 	<div class="col-sm-12 col-md-6">
 		{% get_comment_count for worksheet as comment_count %}
-		{% if comment_count != 0 %}
 		<h4 class="leading">Kommentare</h4>
 		{% render_comment_list for worksheet %}
-		{% else %}
+		{% if comment_count == 0 %}
 		<div class="alert alert-info" role="alert">Noch keine Kommentare vorhanden.</div>
 		{% endif %}
 	

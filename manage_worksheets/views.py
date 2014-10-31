@@ -151,12 +151,12 @@ def sso_submit(request, worksheet_id):
     try:
         # save worksheet to the database
         url = POKAL_URL+"/"+worksheet_id
-        _save_worksheet(request, url, worksheet_id=worksheet_id, user=user)
+        w = _save_worksheet(request, url, worksheet_id=worksheet_id, user=user)
     except ValueError:
         raise SuspiciousOperation
 
     return render(request, "manage_worksheets/sso_submit_success.html", {
-        'worksheet_id': worksheet_id,
+        'worksheet': w,
     })
 
 @login_required
@@ -190,5 +190,5 @@ def choose_tags(request, worksheet_id):
         form = ChooseTagsForm(initial={'tags':tagids})
         return render(request, "manage_worksheets/choose_tags.html", {
             'form': form,
-            'worksheet_id': worksheet_id,
+            'worksheet': worksheet,
         })
