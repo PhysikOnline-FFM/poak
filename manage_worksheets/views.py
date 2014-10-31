@@ -41,7 +41,7 @@ def submit(request):
             # if there was no error, everything is fine
             return HttpResponseRedirect(
                         reverse('manage_worksheets:details',
-                        args=[w.worksheet_id]))
+                        args=[w.pk]))
         except ValueError:
             # there was an error
             return render(request, "manage_worksheets/submit.html", {
@@ -112,22 +112,22 @@ def _save_worksheet(request, url, worksheet_id=None, user=None):
     w.save()
     return w
 
-def details(request, worksheet_id):
-    worksheet = get_object_or_404(Worksheet, worksheet_id=worksheet_id)
+def details(request, worksheet_pk):
+    worksheet = get_object_or_404(Worksheet, pk=worksheet_pk)
     return render(request, "manage_worksheets/details.html", {
         'worksheet': worksheet,
         'pokal_url': POKAL_URL,
         })
 
 @login_required
-def loggedin_details(request, worksheet_id):
+def loggedin_details(request, worksheet_pk):
     return HttpResponseRedirect(
                 reverse('manage_worksheets:details',
-                args=[worksheet_id]))
+                args=[worksheet_pk]))
 
 @login_required
-def delete(request, worksheet_id):
-    worksheet = get_object_or_404(Worksheet, worksheet_id=worksheet_id)
+def delete(request, worksheet_pk):
+    worksheet = get_object_or_404(Worksheet, pk=worksheet_pk)
 
     # see if user is allowed to delete
     if worksheet.owner != request.user.username:
@@ -135,7 +135,7 @@ def delete(request, worksheet_id):
 
     worksheet.delete()
     return render(request, "manage_worksheets/delete_success.html", {
-        'worksheet_id': worksheet_id,
+        'worksheet_pk': worksheet_pk,
     })
 
 def sso_submit(request, worksheet_id):
@@ -160,8 +160,8 @@ def sso_submit(request, worksheet_id):
     })
 
 @login_required
-def choose_tags(request, worksheet_id):
-    worksheet = get_object_or_404(Worksheet, worksheet_id=worksheet_id)
+def choose_tags(request, worksheet_pk):
+    worksheet = get_object_or_404(Worksheet, pk=worksheet_pk)
 
     # see if user is allowed to do this
     if worksheet.owner != request.user.username:
@@ -181,7 +181,7 @@ def choose_tags(request, worksheet_id):
 
         return HttpResponseRedirect(
                     reverse('manage_worksheets:details',
-                    args=[worksheet_id]))
+                    args=[worksheet_pk]))
     else:
         # get the tags that are currently associated with the worksheet
         tagids = [tag.pk for tag in worksheet.tags.all()]
@@ -192,3 +192,10 @@ def choose_tags(request, worksheet_id):
             'form': form,
             'worksheet': worksheet,
         })
+
+def redirect_from_pid(request, worksheet_id):
+    worksheet = get_object_or_404(Worksheet, worksheet_id=worksheet_id)
+    return HttpResponseRedirect(
+            reverse('manage_worksheets:details',
+            args=[worksheet.pk])
+            )

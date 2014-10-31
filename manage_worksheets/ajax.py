@@ -22,14 +22,14 @@ def tags(request):
     tag_dict ={'tags':tag_list}
     return JsonResponse(tag_dict)
 
-def worksheet_details(request, worksheet_id):
+def worksheet_details(request, worksheet_pk):
     """
     returns the properties of the worksheet with the provided ID
     if no such worksheet exists, the response is empty
     """
 
     try:
-        worksheet = Worksheet.objects.get(worksheet_id=worksheet_id)
+        worksheet = Worksheet.objects.get(pk=worksheet_pk)
     except Worksheet.DoesNotExist:
         return JsonResponse({}) # empty response
     return JsonResponse(worksheet.data())
@@ -44,7 +44,7 @@ def worksheets_for_tag(request, tag_id):
         tag = Tag.objects.get(id=tag_id)
     except Tag.DoesNotExist:
         return JsonResponse({}) # empty response
-    ws_list = [w.worksheet_id for w in tag.worksheet_set.all()]
+    ws_list = [w.pk for w in tag.worksheet_set.all()]
     return JsonResponse({'worksheet_list':ws_list})
 
 def worksheet_list(request):
@@ -56,7 +56,7 @@ def worksheet_list(request):
     # details base url
     dbu = reverse('manage_worksheets:details', args=[''])
 
-    ws_list = [w.worksheet_id for w in Worksheet.objects.all()]
+    ws_list = [w.pk for w in Worksheet.objects.all()]
     return JsonResponse({'worksheet_list':ws_list, 'pokal_url':POKAL_URL,
                 'details_base_url':dbu,
                 })
@@ -84,7 +84,7 @@ def minus_tag(request, tag_id):
                 found = True
                 break
         if not found:
-            ws_list.append(w.worksheet_id)
+            ws_list.append(w.pk)
 
     return JsonResponse({'worksheet_list':ws_list})
 

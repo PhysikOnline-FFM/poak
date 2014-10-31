@@ -13,10 +13,10 @@
 		<a href="{{ pokal_url }}/{{ worksheet.worksheet_id }}">{{ worksheet.title }}</a>
 		{% if user.username == worksheet.owner %}
 		<a class="btn btn-default"
-        href="{% url 'manage_worksheets:choose_tags' worksheet.worksheet_id %}">
+        href="{% url 'manage_worksheets:choose_tags' worksheet.pk %}">
             Schlagworte ändern</a>
 		<a class="btn btn-danger"
-            href="{% url 'manage_worksheets:delete' worksheet.worksheet_id %}">
+            href="{% url 'manage_worksheets:delete' worksheet.pk %}">
             Aus POAK entfernen</a>
 		{% endif %}
 	</h2>
@@ -51,7 +51,9 @@
 		{% render_comment_form for worksheet %}
 		{% else %}
 		<div>
-			<a class="btn btn-default" href="{% url 'manage_worksheets:loggedin_details' worksheet.worksheet_id %}">Anmelden</a> um zu kommentieren.
+			<a class="btn btn-default" href="
+                {% url 'manage_worksheets:loggedin_details' worksheet.pk %}">
+                Anmelden</a> um zu kommentieren.
 		</div>
 	</div>
 	{% endif %}

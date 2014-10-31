@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.urlresolvers import reverse
+from threadedcomments.models import ThreadedComment
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
@@ -29,9 +31,16 @@ class Worksheet(models.Model):
             'pub_date': self.pub_date.isoformat(),
             'owner': self.owner,
             'score': (self.upvotes-self.downvotes),
+            'comments':
+            ThreadedComment.objects.filter(object_pk=self.pk).count(),
+            'pk': self.pk,
         }
         return dictionary
 
     def add_tags(self, tags):
         for tag in tags:
             self.tags.add(tag)
+
+    def get_absolute_url(self):
+        return reverse('manage_worksheets:details',
+                    args=[self.pk])

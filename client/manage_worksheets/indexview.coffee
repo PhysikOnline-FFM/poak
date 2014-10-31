@@ -1,8 +1,8 @@
 # html-code for the links with placeholders
-ws_html = (pokal_url, worksheet_id, worksheet_title, details_base_url, tags) ->
+ws_html = (pokal_url, worksheet_pk, worksheet_id, worksheet_title, details_base_url, tags, comments) ->
     ret = "<li id=\"ws#{worksheet_id}\" class=\"list-group-item\">"
     ret += "<a class=\"ws_link\" href=\"#{pokal_url}/#{worksheet_id}\">#{worksheet_title}</a>"
-    ret += "<a class=\"btn btn-xs btn-default pull-right\" href=\"#{details_base_url}#{worksheet_id}\">Kommentare</a>"
+    ret += "<a class=\"btn btn-xs btn-default pull-right\" href=\"#{details_base_url}#{worksheet_pk}\">#{comments} Kommentare</a>"
     ret += "<div>"
     for tag in tags
         ret += "<span class=\"label label-primary\">#{tag}</span>"
@@ -13,7 +13,7 @@ ws_list_set = (worksheet_ids) ->
     $("#worksheets ul").empty()
     ws_list_add worksheet_ids
 
-ws_list_add = (worksheet_ids) ->            
+ws_list_add = (worksheet_ids) ->
     lis = $("#worksheets ul").children()
     for worksheet_id in worksheet_ids
 
@@ -30,7 +30,7 @@ ws_list_add = (worksheet_ids) ->
         $.getJSON "worksheet_details/"+worksheet_id, (worksheet) ->
             $("#worksheets ul").append(
                 # fill the placeholders in the html-code
-                ws_html window.pokal_url, worksheet.worksheet_id, worksheet.title, window.details_base_url, worksheet.tags
+                ws_html window.pokal_url, worksheet.pk, worksheet.worksheet_id, worksheet.title, window.details_base_url, worksheet.tags, worksheet.comments
                 )
 
 ws_list_remove = (worksheet_ids) ->
