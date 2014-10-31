@@ -34,15 +34,15 @@
 				<div class="col-sm-6 col-md-8">
 					{{ form.tags.errors }}
 					<ul id="id_tags" class="list-group">
-					{% for pk, choice in form.tags.field.widget.choices %}
-					<li class="list-group-item">
-						<label for="id_tags_{{ forloop.counter0 }}">
-							<input {% for tag in app.tags.all %}{% if tag.pk == pk %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_tags_{{ forloop.counter0 }}" value="{{ pk }}" name="tags" />
-							&nbsp;{{ choice }}
-						</label>
-					</lie>
-					{% endfor %}
-					</ul>
+                        {% for tag in form.tags %}
+					    <li class="list-group-item">
+                        <label for="{{ tag.id_for_label }}">
+                            {{ tag.tag }}
+                            &nbsp;{{ tag.choice_label }}
+                        </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
 				</div>
 			</div>
 		</div>

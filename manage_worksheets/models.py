@@ -31,3 +31,7 @@ class Worksheet(models.Model):
             'score': (self.upvotes-self.downvotes),
         }
         return dictionary
+
+    def add_tags(self, tags):
+        for tag in tags:
+            self.tags.add(tag)

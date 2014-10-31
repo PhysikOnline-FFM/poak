@@ -6,9 +6,10 @@ urlpatterns = patterns('',
     # html pages
     url(r'^$', views.main, name='main'),
     url(r'^submit$', views.submit, name='submit'),
-    url(r'^choose_tags$', views.choose_tags, name='choose_tags'),
+    url(r'^sso/submit$', views.sso_submit, name='sso_submit'),
     url(r'^w/(?P<worksheet_id>.*)/login$', views.loggedin_details, name='loggedin_details'),
     url(r'^w/(?P<worksheet_id>.*)/delete$', views.delete, name='delete'),
+    url(r'^w/(?P<worksheet_id>.*)/tags$', views.choose_tags, name='choose_tags'),
     url(r'^w/(?P<worksheet_id>.*)$', views.details, name='details'),
 
     # ajax functions
@@ -17,5 +18,5 @@ urlpatterns = patterns('',
     url(r'^worksheet_list$', ajax.worksheet_list, name='worksheet_list'),
     url(r'^worksheets_for_tag/(?P<tag_id>\d+)', ajax.worksheets_for_tag, name='worksheets_for_tag'),
     url(r'^minus_tag/(?P<tag_id>\d+)', ajax.minus_tag, name='minus_tag'),
-    url(r'^move/(?P<from_id>\w+?)/(?P<to_id>\w+)', ajax.move, name='move'),
+    url(r'^sso/move/(?P<from_id>\w+?)/(?P<to_id>\w+)', ajax.move, name='move'),
 )

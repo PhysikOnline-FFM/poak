@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from manage_worksheets.models import Tag, Worksheet
 from manage_worksheets.forms import SubmissionForm, ChooseTagsForm
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from poak.settings import POKAL_URL
 from django.contrib.auth.decorators import login_required
@@ -35,11 +35,13 @@ def submit(request):
         tags = form.cleaned_data['tags']
 
         try:
-            worksheet_id = _process_submission(request, url, tags)
+            # process the submission
+            w = _save_worksheet(request, url)
+            w.tags = tags
             # if there was no error, everything is fine
             return HttpResponseRedirect(
                         reverse('manage_worksheets:details',
-                        args=[worksheet_id]))
+                        args=[w.worksheet_id]))
         except ValueError:
             # there was an error
             return render(request, "manage_worksheets/submit.html", {
@@ -61,7 +63,7 @@ def submit(request):
             'form': form,
             })
 
-def _process_submission(request, url, tags, worksheet_id=None, user=None):
+def _save_worksheet(request, url, worksheet_id=None, user=None):
     """
     creates a new database entry for the given worksheet
 
@@ -82,11 +84,16 @@ def _process_submission(request, url, tags, worksheet_id=None, user=None):
             and base_url != POKAL_URL.replace("https://", "http://", 1)):
             raise ValueError
 
+    if Worksheet.objects.filter(worksheet_id=worksheet_id).exists():
+        # worksheet is already in database
+        raise PermissionDenied
+
     # get data from POKAL
     r = requests.get(url+'/worksheet_properties')
 
     # if the following fails, it raises a ValueError
     worksheet_properties = r.json()
+
     try:
         title = worksheet_properties['name']
         owner = worksheet_properties['worksheet_that_was_published'][0]
@@ -97,18 +104,13 @@ def _process_submission(request, url, tags, worksheet_id=None, user=None):
         user = request.user.username
 
     if owner != user:
-        raise ValueError
+        raise PermissionDenied
 
     # make new entry in the database
     w = Worksheet(worksheet_id=worksheet_id,
             title=title, owner=owner, author="")
-    w.save() # has to be saved before we can add the tags
-
-    # now add the tags
-    for tag in tags:
-        w.tags.add(tag)
-
-    return w.worksheet_id
+    w.save()
+    return w
 
 def details(request, worksheet_id):
     worksheet = get_object_or_404(Worksheet, worksheet_id=worksheet_id)
@@ -136,7 +138,7 @@ def delete(request, worksheet_id):
         'worksheet_id': worksheet_id,
     })
 
-def choose_tags(request):
+def sso_submit(request, worksheet_id):
     """
     two possibilies:
     1. called with post data from a submission
@@ -146,33 +148,47 @@ def choose_tags(request):
     if user == None or user == "guest":
         raise PermissionDenied
 
-    if request.method == 'POST':
+    try:
+        # save worksheet to the database
+        url = POKAL_URL+"/"+worksheet_id
+        _save_worksheet(request, url, worksheet_id=worksheet_id, user=user)
+    except ValueError:
+        raise SuspiciousOperation
+
+    return render(request, "manage_worksheets/sso_submit_success.html", {
+        'worksheet_id': worksheet_id,
+    })
+
+@login_required
+def choose_tags(request, worksheet_id):
+    worksheet = get_object_or_404(Worksheet, worksheet_id=worksheet_id)
+
+    # see if user is allowed to do this
+    if worksheet.owner != request.user.username:
+        raise PermissionDenied
+
+    if request.method == 'POST': # tag were chosen
+
         form = ChooseTagsForm(request.POST)
         if not form.is_valid():
             raise SuspiciousOperation
 
-        # process data
-        worksheet_id = form.cleaned_data['worksheet_id']
-        url = POKAL_URL+"/"+worksheet_id
+        # get data
         tags = form.cleaned_data['tags']
 
-        try:
-            _process_submission(request, url, tags,
-                                worksheet_id=worksheet_id, user=user)
-            # if there was no error, everything is fine
-            return HttpResponseRedirect(
-                        reverse('manage_worksheets:details',
-                        args=[worksheet_id]))
-        except ValueError:
-            # there was an error
-            raise Http404
+        # add the chosen tags to the worksheet in the database
+        worksheet.tags = tags
+
+        return HttpResponseRedirect(
+                    reverse('manage_worksheets:details',
+                    args=[worksheet_id]))
     else:
-        try:
-            # see if there is get data
-            worksheet_id = request.GET['id']
-            form = ChooseTagsForm(initial={'worksheet_id':worksheet_id})
-            return render(request, "manage_worksheets/choose_tags.html", {
-                'form': form,
-            })
-        except KeyError:
-            raise Http404
+        # get the tags that are currently associated with the worksheet
+        tagids = [tag.pk for tag in worksheet.tags.all()]
+
+        # render form with these initial values
+        form = ChooseTagsForm(initial={'tags':tagids})
+        return render(request, "manage_worksheets/choose_tags.html", {
+            'form': form,
+            'worksheet_id': worksheet_id,
+        })

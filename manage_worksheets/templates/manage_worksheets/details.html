@@ -12,7 +12,12 @@
 	<h2>
 		<a href="{{ pokal_url }}/{{ worksheet.worksheet_id }}">{{ worksheet.title }}</a>
 		{% if user.username == worksheet.owner %}
-		<a class="btn btn-danger" href="{% url 'manage_worksheets:delete' worksheet.worksheet_id %}">Aus POAK entfernen</a>
+		<a class="btn btn-default"
+        href="{% url 'manage_worksheets:choose_tags' worksheet.worksheet_id %}">
+            Schlagwörter ändern</a>
+		<a class="btn btn-danger"
+            href="{% url 'manage_worksheets:delete' worksheet.worksheet_id %}">
+            Aus POAK entfernen</a>
 		{% endif %}
 	</h2>
 	<div class="col-sm-12 col-md-6">

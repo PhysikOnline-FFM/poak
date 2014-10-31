@@ -1,8 +1,6 @@
 from poak.settings import POKAL_UNAME_SCRIPT
 import requests
 import re
-from django.http import HttpResponse
-import json
 
 def get_POKAL_username(request):
     url = POKAL_UNAME_SCRIPT
@@ -18,9 +16,3 @@ def get_POKAL_username(request):
         return None
 
     return username
-
-def jsonify(dictionary):
-    """
-    Encodes dictionaries in JSON
-    """
-    return HttpResponse(json.dumps(dictionary), content_type='application/json')

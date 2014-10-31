@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="alert alert-success" role="alert">Das Arbeitsblatt mit der ID
+    {{ worksheet_id }} wurde erfolgreich erstellt.</div>
+<a class="btn btn-default" href="{% url 'manage_worksheets:details' worksheet_id %}">
+    Details zum Arbeitsblatt.</a>
+<a class="btn btn-default" href="{% url 'manage_worksheets:choose_tags' worksheet_id %}">
+    Dem Arbeitsblatt Schlagworte hinzufügen.</a>
+<a class="btn btn-default" href="{% url 'manage_worksheets:main' %}">Zu POAK</a>
+{% endblock %}

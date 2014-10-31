@@ -2,7 +2,9 @@
 
 {% block main %}
     <h1></h1>
-<form name="new_worksheet" action="{% url 'manage_worksheets:choose_tags' %}" method="post">
+<form name="new_worksheet"
+    action="{% url 'manage_worksheets:choose_tags' worksheet_id %}" 
+    method="post">
 <div class="col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -19,16 +21,16 @@
 				<label for="{{ form.tags.id_for_label }}" class="col-sm-6 col-md-4 control-label">{{ form.tags.label }}</label>
 				<div class="col-sm-6 col-md-8">
 					{{ form.tags.errors }}
-					<ul id="id_tags" class="list-group">
-					{% for pk, choice in form.tags.field.widget.choices %}
-					<li class="list-group-item">
-						<label for="id_tags_{{ forloop.counter0 }}">
-							<input {% for tag in app.tags.all %}{% if tag.pk == pk %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_tags_{{ forloop.counter0 }}" value="{{ pk }}" name="tags" />
-							&nbsp;{{ choice }}
-						</label>
-					</lie>
-					{% endfor %}
-					</ul>
+                    <ul id="id_tags" class="list-group">
+                        {% for tag in form.tags %}
+                        <li class="list-group-item">
+                        <label for="{{ tag.id_for_label }}">
+                            {{ tag.tag }}
+                            &nbsp;{{ tag.choice_label }}
+                        </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
 				</div>
 			</div>
 		</div>
