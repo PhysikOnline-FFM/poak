@@ -4,3 +4,4 @@ migrations/
 poak/settings_secret.py
 manage_worksheets/static/manage_worksheets/js/**
 manage_worksheets/static/manage_worksheets/css/**
+threadedcomments
