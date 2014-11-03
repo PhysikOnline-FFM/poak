@@ -103,3 +103,10 @@ def move(request, from_id, to_id):
     worksheet.worksheet_id = to_id
     worksheet.save()
     return JsonResponse({'status':'OK', 'from_id':from_id, 'to_id':to_id})
+
+def check_wsid(request, worksheet_id):
+    try:
+        worksheet = Worksheet.objects.get(worksheet_id=worksheet_id)
+    except Worksheet.DoesNotExist:
+        return JsonResponse({'check':'n'}) #n: no
+    return JsonResponse({'check':'y', 'pk':worksheet.pk}) #y: yes

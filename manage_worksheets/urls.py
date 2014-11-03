@@ -22,4 +22,5 @@ urlpatterns = patterns('',
     url(r'^worksheets_for_tag/(?P<tag_id>\d+)', ajax.worksheets_for_tag, name='worksheets_for_tag'),
     url(r'^minus_tag/(?P<tag_id>\d+)', ajax.minus_tag, name='minus_tag'),
     url(r'^sso/move/(?P<from_id>\w+?)/(?P<to_id>\w+)', ajax.move, name='move'),
+    url(r'^check/(?P<worksheet_id>\w+)$', ajax.check_wsid, name='check_wsid'),
 )
