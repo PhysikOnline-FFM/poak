@@ -1,6 +1,8 @@
 poak
 ====
 
+(version for django1.6)
+
 ## development
 
 ### setup
